@@ -8,7 +8,7 @@ This repository contains a Python script and wiring guide to configure an IBM LT
 Adapter used:
 DSD TECH SH-U11 USB to RS485 RS422 Converter with FTDI FT232R Chip Work for Modbus
 Can be found [here](https://www.amazon.es/dp/B07B416CPK)
-Make sure the chip is `FTDI FT232R`. Do not convert from USB to RS232 and then to RS232 to RS422 or the RX diferential circuit will not have enogh power to transmit to the LTO drive.
+Make sure the chip is `FTDI FT232R`. Do not convert from USB to RS232 and then to RS232 to RS422 or the RX differential circuit will not have enough power to transmit to the LTO drive.
 
 I wrote the code based on the repo from [AC7RNsphnHVbyT4.](https://github.com/AC7RNsphnHVbyT4/ibm-tape-drive-automatic-standalone).
 
@@ -24,9 +24,9 @@ Red      =   RX-
 Orange   =   TX+
 Yellow   =   TX-
 
-Because RS 422 is a crosover connection the adapter's Transmit (TX) pins wire directly to the drive's Receive (RX) pins matching the polarity. Therefore;
+Because RS 422 is a crossover connection the adapter's Transmit (TX) pins wire directly to the drive's Receive (RX) pins matching the polarity. Therefore;
 On the adapter the color schema is:
-1: Bronw   (Drive RX+ to Adapter TXD+)
+1: Brown   (Drive RX+ to Adapter TXD+)
 2: Red     (Drive RX- to Adapter TXD-)
 3: Orange  (Drive TX+ to Adapter RXD+)
 4: Yellow  (Drive TX- to Adapter RXD-)
@@ -36,13 +36,13 @@ On the adapter the color schema is:
 
 ## Script
 
-As [AC7RNsphnHVbyT4](https://github.com/AC7RNsphnHVbyT4/ibm-tape-drive-automatic-standalone) stated on his repo we need to tranmit the hex to the drive and wait for a `06 03` response.
+As [AC7RNsphnHVbyT4](https://github.com/AC7RNsphnHVbyT4/ibm-tape-drive-automatic-standalone) stated on his repo we need to transmit the hex to the drive and wait for a `06 03` response.
 
 The following scripts can be used. The first is a one shot script ran on bash that imports serial and dumps the hex. It won't wait for a response.
 
 ### Oneshot
 
-First try, becuase wiring was incorrect on the TX side it never reached the drive and it kept doing the heartbeat.
+First try, because wiring was incorrect on the TX side it never reached the drive and it kept doing the heartbeat.
 
 ```bash
 pip3 install pyserial
@@ -54,8 +54,7 @@ sudo python3 -c 'import serial; s = serial.Serial("/dev/ttyUSB0", 38400, timeout
 
 ### Listen to heartbeat
 
-This second script listens to heartbeat, sends a 0x00, reveives the output and sends the hex to set to standalone. 
-
+This second script listens to the drive's heartbeat, catches the exact timing window, and sends the hex payload to set it to standalone.
 
 
 ```python3
